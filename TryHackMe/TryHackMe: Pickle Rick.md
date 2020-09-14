@@ -2,6 +2,33 @@
 
 Pickle Rick is a TryHackMe CTF requiring you to exploit a web-server in order to find 3 _ingredients_.
 
+<!-- MarkdownTOC -->
+
+- \[Task 1\] Pickle Rick
+	- What is the first ingredient Rick needs?
+		- Browsing to home page
+		- Running enumeration scripts
+			- NMAP
+			- GOBUSTER
+	- Digging into enumerated information
+		- Login.php
+		- Portal.php
+		- Robots.txt
+	- Attempting to login with enumerated data
+	- Exploiting Portal.php
+		- Command execution form
+		- Trying to get a reverse netcat shell
+		- Shell attempt #1 \(shell script\)
+		- Shell attempt #2 \(php script\)
+		- Shell attempt #3 \(shell script hacky\)
+		- Stealing SSH files instead..
+		- Lets get dirty, and create an encoded script
+		- Exploiting root shell
+	- Whats the second ingredient Rick needs?
+	- Whats the final ingredient Rick needs?
+
+<!-- /MarkdownTOC -->
+
 ## [Task 1] Pickle Rick
 
 ### What is the first ingredient Rick needs?
