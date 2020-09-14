@@ -2,4 +2,13 @@
 
 CTF write-ups and walkthroughs for sites like TryHackMe, HackTheBox...
 
-## Current files
+## Writeups
+
+### TryHackMe
+
+- Bounty Hunter
+- Pickle Rick
+- Scripting
+- Kenobi
+- LazyAdmin
+- Skynet
