@@ -276,11 +276,13 @@ Therefore, we need to add _flags_ when we run it. However, before getting into t
 
 #### Fixing the _outdated_ exploit
 
-I copied the exploit to another directory, because it's _oudated_ and doesn't work with Python3.
+I copied the exploit to another directory, because it's _oudated_ and doesn't work with Python 3.
 
 To fix it: 
 - find all the `print` statements and ensure that the script uses `print(something)` instead of `print something`.
 - ensure the `crack_password` function uses `str(salt + line).encode()` not just `salt + line` in the `hashlib.md5` call.
+
+If you're interested, I've shared the updated [Python exploit script for this task](https://github.com/josh-a-miller/ctf/blob/master/try-hack-me/simple-ctf/updated-exploit.py).
 
 #### Running the script
 
