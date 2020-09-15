@@ -12,5 +12,5 @@ CTF write-ups and walkthroughs for sites like TryHackMe, HackTheBox...
 - Pickle Rick
 - Skynet
 
-### [HackTheBox](https://hackthebox.com)
+### HackTheBox
 _Coming soon_
