@@ -12,6 +12,7 @@ CTF write-ups and walkthroughs for sites like TryHackMe, HackTheBox...
 - [Game Zone](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/game-zone)
 - [Kenobi](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/kenobi)
 - [LazyAdmin](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/lazy-admin)
+- [Mr Robot CTF](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/mr-robot-ctf)
 - [Pickle Rick](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/pickle-rick)
 - [Simple CTF](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/simple-ctf)
 - [Skynet](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/skynet)
