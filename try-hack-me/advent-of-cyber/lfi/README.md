@@ -1,13 +1,5 @@
 # TryHackMe: Advent of Cyber, LFI
 
-__1. What is Charlie going to book a holiday to?__
-
-__2. Read /etc/shadow and crack Charlies password__
-
-__3. What is flag1.txt?__
-
------
-
 ## LFI vulnerability
 
 After browsing the homepade's source code, I found a Javascript excerpt at the bottom of the page.
