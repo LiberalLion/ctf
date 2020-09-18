@@ -35,22 +35,8 @@ hostname -I #and it's usually the 2nd IP address along.
 
 ## [Task 2] Hack the machine
 
-### 1. What is key 1?
-
-Found in the `robots.txt` file:
-```robots
-User-agent: *
-fsocity.dic
-key-1-of-3.txt
-```
-The key is found at `http://target/key-1-of-3.txt`.
-
-### 2. What is key 1?
-
-### 3. What is key 1?
-
 -----
-## 1. Recon
+## Recon
 ### Browse to Host IP
 ```bash
 firefox 10.10.116.6 &;
@@ -110,7 +96,7 @@ I input the command `prepare` into the web app. It made me jump out of my skins 
 
 All seems to be fairly generic; lets dig into some enumeration. We may return later if there's something we've missed.
 
-## 2. Enumeration
+## Enumeration
 
 ### Port & Service enumeration with `nmap`
 
@@ -263,7 +249,7 @@ by OJ Reeves (@TheColonial) & Christian Mehlmauer (@_FireFart_)
     </opml>
     ```
 
-## 3. Gaining access
+## Gaining access
 
 Lets exploit the credentials found earlier:
 ```
