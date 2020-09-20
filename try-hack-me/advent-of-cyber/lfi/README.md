@@ -159,7 +159,7 @@ Stopped: Fri Sep 18 16:56:53 2020
 
 We get shell!
 
-```shell
+```console
 kali@kali:~$ ssh charlie@10.10.190.17
 The authenticity of host '10.10.190.17 (10.10.190.17)' can't be established.
 ECDSA key fingerprint is SHA256:zTb8DQ+FkYzMQWHtrqJMlZKGR8HKhFTeSzpis26L+0s.
@@ -182,7 +182,7 @@ charlie@ip-10-10-190-17:~$
 ## Looting `charlie`
 
 ### Flag1.txt
-```
+```shell
 charlie@ip-10-10-190-17:~$ ls
 flag1.txt
 charlie@ip-10-10-190-17:~$ cat flag1.txt 
