@@ -456,12 +456,4 @@ permitted by applicable law.
 Connection to 10.10.10.187 closed.
 ```
 
-### No /db_admin.php file
-
-After running out of attack opportunities, I referred to an earlier hint in the `/db_admin.php`.
-
-This was the only file missing in the later (active) web server. And the earlier read suggested the user was seeking a better SQL option.
-
-PhpMyAdmin did not exist, however, another option 'adminer'(phonetically similar) is another option for enumeration.
-
 
