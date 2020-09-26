@@ -1,6 +1,6 @@
 # HackTheBox: Buff
 
-[Buff](https://app.hackthebox.eu/machines/263) is a Windows-based CTF from HackTheBox.
+[Buff](https://app.hackthebox.eu/machines/263) is a Windows-based CTF from HackTheBox. Features some Windows privesc. MetaSploit. BOKU. Chisel.
 
 ## Nmap
 
