@@ -4,6 +4,9 @@ __Python__
 ```python
 python -c 'import pty; pty.spawn("/bin/sh")' 
 ```
+```python
+python3 -c 'import pty; pty.spawn("/bin/sh")'   
+```
 
 __sh interactive shell__
 ```sh
