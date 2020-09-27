@@ -7,25 +7,28 @@ CTF write-ups and walkthroughs for sites like TryHackMe, HackTheBox...
 
 #### Complete
 
-- [AgentSUDO](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/agent-sudo)
-- [Avengers Blog](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/avengers-blog)
-- [Blaster](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/blaster)
-- [Boiler CTF](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/bounty-hunter/boiler-ctf)
-- [Bolt](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/bolt)
-- [Bounty Hunter](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/bounty-hunter)
-- [Brooklyn Nine Nine](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/brooklyn-nine-nine)
-- [C4ptur3 th3 fl4g](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/c4ptur3-th3-fl4g)
-- [CTF Colelction Vol.1](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/ctf-collection-vol-1)
-- [Game Zone](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/game-zone)
-- [Kenobi](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/kenobi)
-- [LazyAdmin](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/lazy-admin)
-- [LFI basics](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/lfi-basics)
-- [Linux PrivEsc](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/linux-privesc)
-- [Mr Robot CTF](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/mr-robot-ctf)
-- [Pickle Rick](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/pickle-rick)
-- [Simple CTF](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/simple-ctf)
-- [Skynet](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/skynet)
-- [TomGhost](https://github.com/josh-a-miller/ctf/tree/master/try-hack-me/tomghost)
+- [AgentSUDO](try-hack-me/agent-sudo)
+    - Linux privesc; basic fuzzing; sudo CVE; `sudo -u#-1 bash`
+- [Avengers Blog](try-hack-me/avengers-blog)
+    - SQLi
+- [Blaster](try-hack-me/blaster)
+    - WordPress
+- [Boiler CTF](try-hack-me/bounty-hunter/boiler-ctf)
+- [Bolt](try-hack-me/bolt)
+- [Bounty Hunter](try-hack-me/bounty-hunter)
+- [Brooklyn Nine Nine](try-hack-me/brooklyn-nine-nine)
+- [C4ptur3 th3 fl4g](try-hack-me/c4ptur3-th3-fl4g)
+- [CTF Colelction Vol.1](try-hack-me/ctf-collection-vol-1)
+- [Game Zone](try-hack-me/game-zone)
+- [Kenobi](try-hack-me/kenobi)
+- [LazyAdmin](try-hack-me/lazy-admin)
+- [LFI basics](try-hack-me/lfi-basics)
+- [Linux PrivEsc](try-hack-me/linux-privesc)
+- [Mr Robot CTF](try-hack-me/mr-robot-ctf)
+- [Pickle Rick](try-hack-me/pickle-rick)
+- [Simple CTF](try-hack-me/simple-ctf)
+- [Skynet](try-hack-me/skynet)
+- [TomGhost](try-hack-me/tomghost)
 
 #### In progress
 
@@ -38,6 +41,7 @@ CTF write-ups and walkthroughs for sites like TryHackMe, HackTheBox...
 #### Complete
 
 - [Buff](https://github.com/josh-a-miller/ctf/tree/master/hack-the-box/buff)
+- [Tabby](https://github.com/josh-a-miller/ctf/tree/master/hack-the-box/buff)
 
 #### In Progress
 
