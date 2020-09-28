@@ -76,7 +76,6 @@ bl-themes traversal
 After digging around in bl-themes, found can access directory
 
 
-Null byte breaks?
 ----
 http://10.10.10.191/usb%0
 ```
@@ -85,4 +84,8 @@ Bad Request
 Your browser sent a request that this server could not understand.
 Apache/2.4.41 (Ubuntu) Server at 10.10.10.191 Port 80
 ```
+
+
+----
+__TBC...__
 
