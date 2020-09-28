@@ -1,6 +1,12 @@
 # CTF Write-ups 
 
-CTF write-ups and walkthroughs for sites like TryHackMe, HackTheBox...
+CTF write-ups and walkthroughs for sites like [TryHackMe](#TryHackMe), [HackTheBox](#HackTheBox)...
+
+<strong>
+Methods and contents of this repository are for educational purposes only. 
+<br><br>
+Read before running any files. If you don't understand the consequences of running, do not run.
+</strong>
 
 ---
 ### [TryHackMe](try-hack-me)
