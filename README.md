@@ -25,6 +25,8 @@ Read before running any files. If you don't understand the consequences of runni
 - [Brooklyn Nine Nine](try-hack-me/brooklyn-nine-nine)
 - [C4ptur3 th3 fl4g](try-hack-me/c4ptur3-th3-fl4g)
 - [CTF Collection Vol.1](try-hack-me/ctf-collection-vol-1)
+- [Ice](try-hack-me/ice)
+    - windows, metasploit, mimikatz, icecast, cve, privesc
 - [Game Zone](try-hack-me/game-zone)
 - [Kenobi](try-hack-me/kenobi)
 - [LazyAdmin](try-hack-me/lazy-admin)
