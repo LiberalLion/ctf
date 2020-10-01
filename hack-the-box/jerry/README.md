@@ -1,4 +1,4 @@
-HackTheBox: Jerry
+# HackTheBox: Jerry
 
 A Windows-based CTF from HackTheBox.
 
