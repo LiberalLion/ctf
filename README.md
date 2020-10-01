@@ -56,6 +56,8 @@ Read before running any files. If you don't understand the consequences of runni
 
 - [Buff](hack-the-box/buff)
     - cve, boku, python, cloudme_1112, chisel, port forwarding, ssh tunneling, msfvenom, buffer overflow
+- [Jerry](hack-the-box/jerry)
+    - windows, tomcat, nmap, msfvenom, java/jsp_reverse_shell_tcp war payload
 - [Lame](hack-the-box/lame)
     - linux, ftp, smb, smbmap, smbclient, privesc
 - [Tabby](hack-the-box/tabby)
