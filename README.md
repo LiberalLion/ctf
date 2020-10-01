@@ -33,6 +33,8 @@ Read before running any files. If you don't understand the consequences of runni
 - [LFI basics](try-hack-me/lfi-basics)
     - lfi, log poisoining
 - [Linux PrivEsc](try-hack-me/linux-privesc)
+- [MAL: Malware Introductory](try-hack-me/malware-introductory)
+    - malware, disassembly, signatures, decompiling, packers, obfuscation
 - [Mr Robot CTF](try-hack-me/mr-robot-ctf)
 - [Pickle Rick](try-hack-me/pickle-rick)
 - [Root Me](try-hack-me/root-me)
@@ -68,3 +70,5 @@ Read before running any files. If you don't understand the consequences of runni
 - [Admirer](hack-the-box/admirer)
 - [Blunder](hack-the-box/blunder)
     - blundit
+
+
