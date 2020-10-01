@@ -291,10 +291,10 @@ dir
 C:\Users\Administrator\Desktop\flags>type *
 type *
 user.txt
-7004dbcef0f854e0fb401875f26ebd00
+[REDACTED]
 
 root.txt
-04a8b36e1545a455393d067e772fe90e
+[REDACTED]
 ```
 
 And there we have it. Jerry complete.
