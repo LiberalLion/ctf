@@ -15,6 +15,8 @@ Read before running any files. If you don't understand the consequences of runni
 
 - [AgentSUDO](try-hack-me/agent-sudo)
     - linux, privesc, sudo cve, sudo -u#-1
+- [Authenticate](try-hack-me/authenticate)
+    - authentication, dictionary attacks, jwt, session, cookies, idor
 - [Avengers Blog](try-hack-me/avengers-blog)
     - cookies, http headers, ftp, gobuster, sqli, remote code execution, linux
 - [Blaster](try-hack-me/blaster)
@@ -36,6 +38,7 @@ Read before running any files. If you don't understand the consequences of runni
 - [MAL: Malware Introductory](try-hack-me/malware-introductory)
     - malware, disassembly, signatures, decompiling, packers, obfuscation
 - [Mr Robot CTF](try-hack-me/mr-robot-ctf)
+- [Overpass](try-hack-me/overpass)
 - [Pickle Rick](try-hack-me/pickle-rick)
 - [Root Me](try-hack-me/root-me)
     - linux, rce, file upload, php extension bypass, python suid, sh -p
