@@ -48,7 +48,8 @@ Read before running any files. If you don't understand the consequences of runni
     - tomcat
 - [Wonderland](try-hack-me/wonderland)
     - linux, privesc, python imports, perl, setuid_+ep capabilities, getcap, elf, path env variables
-
+- [XXE](try-hack-me/xxe)
+	- xxe, xml, web, injection, rce, lfi
 #### In progress
 
 - [Advent of Cyber](try-hack-me/advent-of-cyber)
