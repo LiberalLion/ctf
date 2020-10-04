@@ -264,4 +264,3 @@ thm{redacted}
 
 And there we have it.
 
-
