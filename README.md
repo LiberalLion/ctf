@@ -26,6 +26,8 @@ Read before running any files. If you don't understand the consequences of runni
 - [Bounty Hunter](try-hack-me/bounty-hunter)
 - [Brooklyn Nine Nine](try-hack-me/brooklyn-nine-nine)
 - [C4ptur3 th3 fl4g](try-hack-me/c4ptur3-th3-fl4g)
+- [Convert My Video](try-hack/convertmyvideo)
+	- command injection, cron
 - [CTF Collection Vol.1](try-hack-me/ctf-collection-vol-1)
 - [Ice](try-hack-me/ice)
     - windows, metasploit, mimikatz, icecast, cve, privesc
