@@ -456,7 +456,7 @@ Which reveals `robot`'s password to be: `abcdefghijklmnopqrstuvwxyz`
 ### Breaking out of binary to `su` to robot
 
 We can't run the `su` command from this current shell. So we need to 'break-out' we can do this with:
-```console
+```shell
 $ su
 su: must be run from a terminal
 
@@ -517,3 +517,5 @@ root
 # cat /root/key-3-of-3.txt
 cat /root/key-3-of-3.txt     
 ```
+
+
